@@ -52,7 +52,6 @@ val httpClientModule = module {
                 url("https://api.igdb.com/v4/")
 
                 headers.appendIfNameAbsent("Client-ID", System.getenv("CLIENT_ID"))
-                headers.appendIfNameAbsent("Content-Type", "text/plain")
             }
         }
     }
