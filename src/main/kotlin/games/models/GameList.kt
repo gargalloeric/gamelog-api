@@ -5,6 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GameList(
     val id: Long,
-    val name: String,
-    val cover: Long
+    val name: String
 )
