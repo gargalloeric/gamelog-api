@@ -1,6 +1,6 @@
 package com.mocosoft.covers
 
-import com.mocosoft.covers.models.CoverResponse
+import com.mocosoft.covers.models.IGDBCover
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.post
@@ -17,7 +17,7 @@ class CoverServiceImpl(private val httpClient: HttpClient) : CoverService {
     override suspend fun getCover(gameId: Long?): String {
         requireNotNull(gameId)
 
-        val response: List<CoverResponse> = httpClient.post(endpoint){
+        val response: List<IGDBCover> = httpClient.post(endpoint){
             setBody("fields url; where game = $gameId;")
         }.body()
         val normal = response.firstOrNull()?.url?.replace("t_thumb","t_original") ?: ""
