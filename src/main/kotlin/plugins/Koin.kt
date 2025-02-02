@@ -1,5 +1,6 @@
 package com.mocosoft.plugins
 
+import com.mocosoft.covers.coverModule
 import com.mocosoft.games.gamesModule
 import com.mocosoft.http.httpClientModule
 import io.ktor.server.application.Application
@@ -10,5 +11,6 @@ fun Application.configureKoin() {
     install(Koin) {
         modules(gamesModule)
         modules(httpClientModule)
+        modules(coverModule)
     }
 }
