@@ -9,16 +9,15 @@ import io.ktor.server.routing.routing
 import org.koin.ktor.ext.inject
 
 fun Application.configureGamesRoutes() {
+
     val service by inject<GamesService>()
+
     routing {
         get("/games") {
-            val pageNumber = call.queryParameters["PageNumber"]
-            val pageSize = call.queryParameters["PageSize"]
+            val pageNumber = call.queryParameters["PageNumber"]?.toLongOrNull()
+            val pageSize = call.queryParameters["PageSize"]?.toLongOrNull()
 
-            requireNotNull(pageNumber)
-            requireNotNull(pageSize)
-
-            val games: List<GameList> = service.getGames(pageNumber.toLong(), pageSize.toLong())
+            val games: List<GameList> = service.getGames(pageNumber, pageSize)
 
             call.respond(games)
         }
