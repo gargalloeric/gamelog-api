@@ -28,4 +28,16 @@ dependencies {
     implementation(libs.logback.classic)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
+
+
+    // Ktor client
+    val ktorVersion = "3.0.3"
+    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    implementation("io.ktor:ktor-client-cio:$ktorVersion")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+    implementation("io.ktor:ktor-client-auth:$ktorVersion")
+
+    // Koin dependency injection
+    val koinVersion = "4.0.2"
+    implementation("io.insert-koin:koin-ktor:$koinVersion")
 }

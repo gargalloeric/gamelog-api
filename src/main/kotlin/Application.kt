@@ -1,5 +1,6 @@
 package com.mocosoft
 
+import com.mocosoft.plugins.configureKoin
 import com.mocosoft.plugins.configureRouting
 import com.mocosoft.plugins.configureSerialization
 import io.ktor.server.application.*
@@ -14,4 +15,5 @@ fun main() {
 fun Application.module() {
     configureSerialization()
     configureRouting()
+    configureKoin()
 }
