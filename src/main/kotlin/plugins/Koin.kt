@@ -8,5 +8,6 @@ import org.koin.ktor.plugin.Koin
 fun Application.configureKoin() {
     install(Koin) {
         modules(gamesModule)
+        modules(httpClientModule)
     }
 }
