@@ -11,12 +11,22 @@ fun Application.configureCoverRoutes() {
     val service by inject<CoverService>()
 
     routing {
-        get("/covers") {
-            val gameId = call.queryParameters["GameID"]?.toLongOrNull()
+        get("/covers/{gameId}") {
+            val gameId = call.parameters["gameId"]?.toLongOrNull()
 
             val cover: String = service.getCover(gameId)
 
             call.respond(cover)
+        }
+
+        get("/covers") {
+            val gameIds = call.queryParameters["gameIds"]
+
+            val gameIdsLong = gameIds?.split(",")?.mapNotNull { it.toLongOrNull() }
+
+            val covers = service.getCovers(gameIdsLong)
+
+            call.respond(covers)
         }
     }
 }
