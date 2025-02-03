@@ -7,14 +7,14 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 
 interface GamesService {
-    suspend fun getGames(pageNumber: Long?, pageSize: Long?): List<IGDBGameList>
+    suspend fun getGames(pageNumber: Int?, pageSize: Int?): List<IGDBGameList>
 }
 
 class GameServiceImpl(private val httpClient: HttpClient) : GamesService {
 
     private val endpoint: String = "games"
 
-    override suspend fun getGames(pageNumber: Long?, pageSize: Long?): List<IGDBGameList> {
+    override suspend fun getGames(pageNumber: Int?, pageSize: Int?): List<IGDBGameList> {
         requireNotNull(pageNumber)
         requireNotNull(pageSize)
 

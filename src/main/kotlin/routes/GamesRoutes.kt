@@ -14,8 +14,8 @@ fun Application.configureGamesRoutes() {
 
     routing {
         get("/games") {
-            val pageNumber = call.queryParameters["PageNumber"]?.toLongOrNull()
-            val pageSize = call.queryParameters["PageSize"]?.toLongOrNull()
+            val pageNumber = call.queryParameters["pageNumber"]?.toIntOrNull()
+            val pageSize = call.queryParameters["pageSize"]?.toIntOrNull()
 
             val games: List<IGDBGameList> = service.getGames(pageNumber, pageSize)
 
