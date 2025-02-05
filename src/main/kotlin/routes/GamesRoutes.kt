@@ -1,7 +1,7 @@
 package com.mocosoft.routes
 
 import com.mocosoft.games.GamesService
-import com.mocosoft.games.models.GameList
+import com.mocosoft.games.models.IGDBGameList
 import io.ktor.server.application.Application
 import io.ktor.server.response.respond
 import io.ktor.server.routing.get
@@ -14,10 +14,8 @@ fun Application.configureGamesRoutes() {
 
     routing {
         get("/games") {
-            val pageNumber = call.queryParameters["PageNumber"]?.toLongOrNull()
-            val pageSize = call.queryParameters["PageSize"]?.toLongOrNull()
 
-            val games: List<GameList> = service.getGames(pageNumber, pageSize)
+            val games: List<IGDBGameList> = service.getGames(call.queryParameters)
 
             call.respond(games)
         }
