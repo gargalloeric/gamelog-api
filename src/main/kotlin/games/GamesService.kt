@@ -1,5 +1,6 @@
 package com.mocosoft.games
 
+import com.mocosoft.games.models.IGDBGameDetails
 import com.mocosoft.games.models.IGDBGameList
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -10,6 +11,7 @@ import io.ktor.server.util.getOrFail
 
 interface GamesService {
     suspend fun getGames(queryParameters: Parameters): List<IGDBGameList>
+    suspend fun getGameDetails(queryParameters: Parameters): IGDBGameDetails
 }
 
 class GameServiceImpl(private val httpClient: HttpClient) : GamesService {
@@ -25,5 +27,14 @@ class GameServiceImpl(private val httpClient: HttpClient) : GamesService {
         }.body()
 
         return games
+    }
+
+    override suspend fun getGameDetails(queryParameters: Parameters): IGDBGameDetails {
+        val gameId = queryParameters.getOrFail("gameId")
+        val gameDetails: List<IGDBGameDetails> = httpClient.post(endpoint) {
+            setBody("fields name, total_rating, summary; where id = $gameId;")
+        }.body()
+
+        return gameDetails.first()
     }
 }
