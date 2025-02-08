@@ -50,16 +50,15 @@ class GameServiceImpl(private val httpClient: HttpClient,
     }
 
     override suspend fun getGameDetails(pathParameters: Parameters): GameDetails {
-        val gameId = pathParameters.getOrFail("gameId")
-        val gameIdLong = gameId.toLong()
+        val gameId = pathParameters.getOrFail("gameId").toLong()
 
         val igdbDetails: IGDBGameDetails = httpClient.post(endpoint) {
             setBody("fields name, total_rating, summary; where id = $gameId;")
         }.body<List<IGDBGameDetails>>().first()
 
-        val cover = coverService.getCover(gameIdLong)
+        val cover = coverService.getCover(gameId)
 
-        val duration = timeToBeatService.getTimeToBeat(gameIdLong)
+        val duration = timeToBeatService.getTimeToBeat(gameId)
 
         val gameDetails = GameDetails(
             name = igdbDetails.name,
