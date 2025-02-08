@@ -15,9 +15,9 @@ fun Application.configureTimeToBeatRoutes() {
 
     routing {
         get("/timetobeat") {
-            val gameId = call.queryParameters["GameID"]?.toLongOrNull()
+            val gameId = call.queryParameters["GameID"]?.toLong()
 
-            val timeToBeat: IGDBGameDuration? = service.getTimeToBeat(gameId)
+            val timeToBeat: IGDBGameDuration? = service.getTimeToBeat(gameId ?: -1)
 
             if (timeToBeat != null) {
                 call.respond(timeToBeat)
