@@ -20,9 +20,10 @@ interface GamesService {
     suspend fun getGameDetails(pathParameters: Parameters): GameDetails
 }
 
-class GameServiceImpl(private val httpClient: HttpClient,
-                      private val coverService: CoverService,
-                      private val timeToBeatService: TimeToBeatService
+class GameServiceImpl(
+    private val httpClient: HttpClient,
+    private val coverService: CoverService,
+    private val timeToBeatService: TimeToBeatService
 ) : GamesService {
 
     private val endpoint: String = "games"
