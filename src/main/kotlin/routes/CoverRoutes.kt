@@ -5,6 +5,7 @@ import io.ktor.server.application.Application
 import io.ktor.server.response.respond
 import io.ktor.server.routing.routing
 import io.ktor.server.routing.get
+import io.ktor.server.util.getOrFail
 import org.koin.ktor.ext.inject
 
 fun Application.configureCoverRoutes() {
@@ -12,7 +13,7 @@ fun Application.configureCoverRoutes() {
 
     routing {
         get("/covers/{gameId}") {
-            val gameId = call.parameters["gameId"]?.toLongOrNull()
+            val gameId = call.pathParameters.getOrFail("gameId").toLong()
 
             val cover: String = service.getCover(gameId)
 
@@ -20,9 +21,9 @@ fun Application.configureCoverRoutes() {
         }
 
         get("/covers") {
-            val gameIds = call.queryParameters["gameIds"]
+            val gameIds = call.queryParameters.getOrFail("gameIds")
 
-            val gameIdsLong = gameIds?.split(",")?.mapNotNull { it.toLongOrNull() }
+            val gameIdsLong = gameIds.split(",").map { it.toLong() }
 
             val covers = service.getCovers(gameIdsLong)
 

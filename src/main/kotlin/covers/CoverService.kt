@@ -7,17 +7,15 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 
 interface CoverService {
-    suspend fun getCover(gameId: Long?): String
-    suspend fun getCovers(gameIds: List<Long>?): List<IGDBCover>
+    suspend fun getCover(gameId: Long): String
+    suspend fun getCovers(gameIds: List<Long>): List<IGDBCover>
 }
 
 class CoverServiceImpl(private val httpClient: HttpClient) : CoverService {
 
     private val endpoint = "covers"
 
-    override suspend fun getCover(gameId: Long?): String {
-        requireNotNull(gameId)
-
+    override suspend fun getCover(gameId: Long): String {
         val response: List<IGDBCover> = httpClient.post(endpoint){
             setBody("fields url, game; where game = $gameId;")
         }.body()
@@ -27,9 +25,7 @@ class CoverServiceImpl(private val httpClient: HttpClient) : CoverService {
 
     }
 
-    override suspend fun getCovers(gameIds: List<Long>?): List<IGDBCover> {
-        requireNotNull(gameIds)
-
+    override suspend fun getCovers(gameIds: List<Long>): List<IGDBCover> {
         val bodyGameIds = gameIds.joinToString(prefix = "(", postfix = ")")
 
         val response: List<IGDBCover> = httpClient.post(endpoint){
