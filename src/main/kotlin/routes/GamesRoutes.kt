@@ -1,7 +1,7 @@
 package com.mocosoft.routes
 
 import com.mocosoft.games.GamesService
-import com.mocosoft.games.models.IGDBGameDetails
+import com.mocosoft.games.models.GameDetails
 import com.mocosoft.games.models.IGDBGameList
 import io.ktor.server.application.Application
 import io.ktor.server.response.respond
@@ -22,7 +22,7 @@ fun Application.configureGamesRoutes() {
         }
         get("/game_details/{gameId}") {
 
-            val gameDetails: IGDBGameDetails = service.getGameDetails(call.pathParameters)
+            val gameDetails: GameDetails = service.getGameDetails(call.pathParameters)
 
             call.respond(gameDetails)
         }

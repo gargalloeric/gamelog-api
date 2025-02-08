@@ -1,7 +1,10 @@
 package com.mocosoft.games
 
+import com.mocosoft.covers.CoverService
+import com.mocosoft.games.models.GameDetails
 import com.mocosoft.games.models.IGDBGameDetails
 import com.mocosoft.games.models.IGDBGameList
+import com.mocosoft.timetobeat.TimeToBeatService
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.post
@@ -11,10 +14,10 @@ import io.ktor.server.util.getOrFail
 
 interface GamesService {
     suspend fun getGames(queryParameters: Parameters): List<IGDBGameList>
-    suspend fun getGameDetails(queryParameters: Parameters): IGDBGameDetails
+    suspend fun getGameDetails(pathParameters: Parameters): GameDetails
 }
 
-class GameServiceImpl(private val httpClient: HttpClient) : GamesService {
+class GameServiceImpl(private val httpClient: HttpClient, private val coverService: CoverService, private val timeToBeatService: TimeToBeatService) : GamesService {
 
     private val endpoint: String = "games"
 
@@ -29,12 +32,28 @@ class GameServiceImpl(private val httpClient: HttpClient) : GamesService {
         return games
     }
 
-    override suspend fun getGameDetails(queryParameters: Parameters): IGDBGameDetails {
-        val gameId = queryParameters.getOrFail("gameId")
-        val gameDetails: List<IGDBGameDetails> = httpClient.post(endpoint) {
-            setBody("fields name, total_rating, summary; where id = $gameId;")
-        }.body()
+    override suspend fun getGameDetails(pathParameters: Parameters): GameDetails {
+        val gameId = pathParameters.getOrFail("gameId")
+        val gameIdLong = gameId.toLong()
 
-        return gameDetails.first()
+        val igdbDetails: IGDBGameDetails = httpClient.post(endpoint) {
+            setBody("fields name, total_rating, summary; where id = $gameId;")
+        }.body<List<IGDBGameDetails>>().first()
+
+        val cover = coverService.getCover(gameIdLong)
+
+        val duration = timeToBeatService.getTimeToBeat(gameIdLong)
+
+        val gameDetails = GameDetails(
+            name = igdbDetails.name,
+            summary = igdbDetails.summary,
+            rating = igdbDetails.rating,
+            cover = cover,
+            durationFast = duration?.hastily,
+            durationNormal = duration?.normally,
+            durationComplete = duration?.completely
+        )
+
+        return gameDetails
     }
 }
