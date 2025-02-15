@@ -8,7 +8,7 @@ data class GameDetails(
     val rating: Double,
     val summary: String,
     val cover: String,
-    val durationFast: Long?,
-    val durationNormal: Long?,
-    val durationComplete: Long?
+    val durationFast: Long,
+    val durationNormal: Long,
+    val durationComplete: Long
 )
