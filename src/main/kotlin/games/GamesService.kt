@@ -68,9 +68,9 @@ class GameServiceImpl(
                 summary = igdbDetails.summary,
                 rating = igdbDetails.rating,
                 cover = cover,
-                durationFast = duration.hastily,
-                durationNormal = duration.normally,
-                durationComplete = duration.completely
+                durationFast = duration?.hastily,
+                durationNormal = duration?.normally,
+                durationComplete = duration?.completely
             )
         }
 

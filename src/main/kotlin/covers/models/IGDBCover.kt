@@ -8,5 +8,5 @@ data class IGDBCover(
     val id: Long,
     @SerialName("game")
     val gameId: Long,
-    var url: String
+    var url: String?
 )

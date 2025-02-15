@@ -8,20 +8,19 @@ import io.ktor.client.request.setBody
 
 
 interface TimeToBeatService {
-    suspend fun getTimeToBeat(gameId: Long): IGDBGameDuration
+    suspend fun getTimeToBeat(gameId: Long): IGDBGameDuration?
 }
 
 class TimeToBeatServiceImpl(private val httpClient: HttpClient) : TimeToBeatService {
 
     private val endpoint: String = "game_time_to_beats"
 
-    override suspend fun getTimeToBeat(gameId: Long): IGDBGameDuration {
+    override suspend fun getTimeToBeat(gameId: Long): IGDBGameDuration? {
 
         val response: List<IGDBGameDuration> = httpClient.post(endpoint){
             setBody("fields hastily,normally,completely; where game_id = $gameId;")
         }.body()
-        val gameDuration = response.first()
 
-        return gameDuration
+        return response.firstOrNull()
     }
 }
