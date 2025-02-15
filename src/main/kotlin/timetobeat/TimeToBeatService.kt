@@ -20,8 +20,7 @@ class TimeToBeatServiceImpl(private val httpClient: HttpClient) : TimeToBeatServ
         val response: List<IGDBGameDuration> = httpClient.post(endpoint){
             setBody("fields hastily,normally,completely; where game_id = $gameId;")
         }.body()
-        val gameDuration = response.firstOrNull()
 
-        return gameDuration
+        return response.firstOrNull()
     }
 }

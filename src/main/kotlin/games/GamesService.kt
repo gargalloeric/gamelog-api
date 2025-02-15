@@ -17,7 +17,7 @@ import io.ktor.server.util.getOrFail
 
 interface GamesService {
     suspend fun getGames(queryParameters: Parameters): List<GameList>
-    suspend fun getGameDetails(pathParameters: Parameters): GameDetails
+    suspend fun getGameDetails(pathParameters: Parameters): GameDetails?
 }
 
 class GameServiceImpl(
@@ -50,26 +50,29 @@ class GameServiceImpl(
         return results
     }
 
-    override suspend fun getGameDetails(pathParameters: Parameters): GameDetails {
+    override suspend fun getGameDetails(pathParameters: Parameters): GameDetails? {
         val gameId = pathParameters.getOrFail("gameId").toLong()
+        var gameDetails: GameDetails? = null
 
-        val igdbDetails: IGDBGameDetails = httpClient.post(endpoint) {
+        val igdbDetails: IGDBGameDetails? = httpClient.post(endpoint) {
             setBody("fields name, total_rating, summary; where id = $gameId;")
-        }.body<List<IGDBGameDetails>>().first()
+        }.body<List<IGDBGameDetails>>().firstOrNull()
 
-        val cover = coverService.getCover(gameId)
+        if (igdbDetails != null) {
+            val cover = coverService.getCover(gameId)
 
-        val duration = timeToBeatService.getTimeToBeat(gameId)
+            val duration = timeToBeatService.getTimeToBeat(gameId)
 
-        val gameDetails = GameDetails(
-            name = igdbDetails.name,
-            summary = igdbDetails.summary,
-            rating = igdbDetails.rating,
-            cover = cover,
-            durationFast = duration?.hastily,
-            durationNormal = duration?.normally,
-            durationComplete = duration?.completely
-        )
+            gameDetails = GameDetails(
+                name = igdbDetails.name,
+                summary = igdbDetails.summary,
+                rating = igdbDetails.rating,
+                cover = cover,
+                durationFast = duration?.hastily,
+                durationNormal = duration?.normally,
+                durationComplete = duration?.completely
+            )
+        }
 
         return gameDetails
     }

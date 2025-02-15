@@ -8,6 +8,6 @@ data class IGDBGameDetails(
     val id: Long,
     val name: String,
     @SerialName("total_rating")
-    val rating: Double,
-    val summary: String
+    val rating: Double?,
+    val summary: String?
 )

@@ -13,6 +13,7 @@ import io.ktor.client.request.forms.submitForm
 import io.ktor.http.parameters
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.util.appendIfNameAbsent
+import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 
 var tokenClient = HttpClient(CIO) {
@@ -37,7 +38,9 @@ val httpClientModule = module {
     single {
         HttpClient(CIO) {
             install(ContentNegotiation) {
-                json()
+                json(Json {
+                    explicitNulls = false
+                })
             }
 
             install(Auth) {
