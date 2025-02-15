@@ -3,6 +3,7 @@ package com.mocosoft.routes
 import com.mocosoft.games.GamesService
 import com.mocosoft.games.models.GameList
 import com.mocosoft.games.models.GameDetails
+import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.response.respond
 import io.ktor.server.routing.get
@@ -20,11 +21,15 @@ fun Application.configureGamesRoutes() {
 
             call.respond(games)
         }
-        get("/game_details/{gameId}") {
+        get("/games/{gameId}") {
 
-            val gameDetails: GameDetails = service.getGameDetails(call.pathParameters)
+            val gameDetails: GameDetails? = service.getGameDetails(call.pathParameters)
 
-            call.respond(gameDetails)
+            if (gameDetails != null) {
+                call.respond(gameDetails)
+            } else {
+                call.response.status(HttpStatusCode.NotFound)
+            }
         }
     }
 }
