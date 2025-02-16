@@ -1,7 +1,10 @@
 package com.mocosoft.plugins
 
+import com.mocosoft.db.GameLogTable
 import io.ktor.server.application.Application
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.transactions.transaction
 
 fun Application.configureDatabase() {
     val name = System.getenv("PG_DB")
@@ -14,4 +17,9 @@ fun Application.configureDatabase() {
         user = user,
         password = password
     )
+
+    transaction {
+        exec("CREATE TYPE GameState AS ENUM ('COMPLETED', 'IN_PROGRESS', 'PLANNED');")
+        SchemaUtils.create(GameLogTable)
+    }
 }
