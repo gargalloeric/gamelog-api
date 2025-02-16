@@ -41,9 +41,15 @@ dependencies {
     val koinVersion = "4.0.2"
     implementation("io.insert-koin:koin-ktor:$koinVersion")
 
+    // Kotlin datetime
+    val dateTimeVersion = "0.6.2"
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:$dateTimeVersion")
+
+
     // Exposed ORM
     val exposedVersion = "0.59.0"
     implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-kotlin-datetime:$exposedVersion")
     implementation("org.postgresql:postgresql:42.7.1")
 }
