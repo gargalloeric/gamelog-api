@@ -19,7 +19,7 @@ fun Application.configureDatabase() {
     )
 
     transaction {
-        exec("CREATE TYPE GameState AS ENUM ('COMPLETED', 'IN_PROGRESS', 'PLANNED');")
+        exec("DO $$ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'gamestate') THEN CREATE TYPE GameState AS ENUM ('COMPLETED', 'IN_PROGRESS', 'PLANNED'); END IF; END $$;")
         SchemaUtils.create(GameLogTable)
     }
 }
